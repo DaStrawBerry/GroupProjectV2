@@ -6,6 +6,6 @@ import lombok.*;
 @Data
 @NoArgsConstructor @AllArgsConstructor
 public class ResultDTO {
-    private String test_id;
-    private String user_id;
+    private String testid;
+    private String userid;
 }

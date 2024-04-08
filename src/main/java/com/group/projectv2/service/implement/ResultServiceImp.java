@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 public class ResultServiceImp implements ResultService {
     @Autowired
-    ResultRepository repository;
+    ResultRepository resultRepository;
     @Autowired
     QuestionRepository questionRepository;
     @Autowired
@@ -28,7 +28,7 @@ public class ResultServiceImp implements ResultService {
 
     @Override
     public ResponseEntity<?> getAllResult() {
-        List<Result> results = repository.findAll();
+        List<Result> results = resultRepository.findAll();
         if(results.isEmpty()){
             return ResponseEntity.status(HttpStatus.NO_CONTENT)
                     .body(new ResponseObject(
@@ -48,17 +48,17 @@ public class ResultServiceImp implements ResultService {
     @Override
     public ResponseEntity<?> doTest(ResultDTO resultDTO) {
         Result result = new Result();
-        result.setUser_id(resultDTO.getUser_id());
-        result.setTest_id(resultDTO.getTest_id());
+        result.setUserid(resultDTO.getUserid());
+        result.setTestid(resultDTO.getTestid());
         result.setMark(0.0);
-        result.setIs_completed(false);
+        result.setIscompleted(false);
 
         List<Object> data = new ArrayList<>();
         Test test = new Test();
-        test.setId(resultDTO.getTest_id());
+        test.setId(resultDTO.getTestid());
         data.add(
                 ((ResponseObject)
-                        testService.retrieveTestById(resultDTO.getTest_id())
+                        testService.retrieveTestById(resultDTO.getTestid())
                                 .getBody())
                         .getData()
         );
@@ -79,17 +79,17 @@ public class ResultServiceImp implements ResultService {
     @Override
     public ResponseEntity<?> finish(ResultInDTO resultInDTO) {
         Result result = rmap.dtoToEntity(resultInDTO);
-        List<Result> results = repository.findAllByUser_id(result.getUser_id());
+        List<Result> results = resultRepository.findAllByUserid(result.getUserid());
         for (Result r : results){
-            if(r.getTest_id().compareTo(result.getTest_id())==0){
+            if(r.getTestid().compareTo(result.getTestid())==0){
                 result = r;
                 break;
             }
         }
         int correct = 0;
-        List<Question> questions = questionRepository.findAllByTest_id(result.getTest_id());
+        List<Question> questions = questionRepository.findAllByTestid(result.getTestid());
         for (int i = 1; i <= questions.size(); i++) {
-            if (questions.get(i).getAnswer().compareTo(result.getAns_list()[i])==0){
+            if (questions.get(i).getAnswer().compareTo(result.getAnslist()[i])==0){
                 correct++;
             }
         }
@@ -100,14 +100,14 @@ public class ResultServiceImp implements ResultService {
                 .body(new ResponseObject(
                         "SUBMITTED",
                         "FINISHED",
-                        rmap.entityToDto(repository.save(result))
+                        rmap.entityToDto(resultRepository.save(result))
                 ));
     }
 
     @Override
     public ResponseEntity<?> updateResult(Result result) {
         try{
-            repository.save(result);
+            resultRepository.save(result);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject(
                             "UPDATED",
@@ -126,8 +126,8 @@ public class ResultServiceImp implements ResultService {
 
     @Override
     public ResponseEntity<?> getResult(ResultDTO resultDTO) {
-        List<Result> results = repository.findAllByUser_id(resultDTO.getUser_id());
-        if(resultDTO.getTest_id().compareTo("")==0){
+        List<Result> results = resultRepository.findAllByUserid(resultDTO.getUserid());
+        if(resultDTO.getTestid().compareTo("")==0){
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject(
                             "FOUND",
@@ -137,7 +137,7 @@ public class ResultServiceImp implements ResultService {
         }
         Result result = null;
         for (Result r : results){
-            if(r.getTest_id().compareTo(resultDTO.getTest_id())==0){
+            if(r.getTestid().compareTo(resultDTO.getTestid())==0){
                 result = r;
                 break;
             }
@@ -161,7 +161,7 @@ public class ResultServiceImp implements ResultService {
     @Override
     public ResponseEntity<?> deleteResult(Result result) {
         try{
-            repository.deleteById(result.getId());
+            resultRepository.deleteById(result.getId());
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject(
                             "DELETED",
@@ -169,7 +169,7 @@ public class ResultServiceImp implements ResultService {
                             ""
                     ));
         }catch (Exception e){
-            repository.deleteById(result.getId());
+            resultRepository.deleteById(result.getId());
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             "FAILED",

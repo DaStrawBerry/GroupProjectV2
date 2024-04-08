@@ -14,7 +14,7 @@ public class Test {
     @Id
     private String id;
     private String name;
-    private Boolean is_limit;
+    private Boolean islimit;
     private LocalDateTime duration;
     private LocalDateTime start;
     private LocalDateTime end;

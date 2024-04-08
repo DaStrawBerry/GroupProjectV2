@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor @AllArgsConstructor
 public class TestDTO {
     private String name;
-    private Boolean is_limit;
+    private Boolean islimit;
     private LocalDateTime duration;
     private LocalDateTime start;
     private LocalDateTime end;

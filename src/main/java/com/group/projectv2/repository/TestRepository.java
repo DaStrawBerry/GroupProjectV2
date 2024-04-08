@@ -8,5 +8,5 @@ import java.util.List;
 public interface TestRepository extends MongoRepository<Test, String> {
     public List<Test> findAllById(String id);
     public List<Test> findAllByNameLike(String name);
-    public List<Test> findAllByIs_limit(Boolean is_limit);
+    public List<Test> findAllByIslimit(Boolean islimit);
 }

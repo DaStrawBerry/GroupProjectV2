@@ -77,7 +77,7 @@ public class TestServiceImp implements TestService {
     public ResponseEntity<?> retrieveTestByNameOrType(Test test) {
         List<Test> tests = repository.findAllByNameLike(test.getName());
         if(!tests.isEmpty()){
-            tests = repository.findAllByIs_limit(test.getIs_limit());
+            tests = repository.findAllByIslimit(test.getIslimit());
         }
         if(!tests.isEmpty()){
             return ResponseEntity.status(HttpStatus.OK)

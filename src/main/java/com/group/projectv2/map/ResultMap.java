@@ -13,11 +13,11 @@ public class ResultMap {
     public Result dtoToEntity(ResultInDTO resultInDTO){
         Result result = new Result();
         result.setStart(resultInDTO.getStart());
-        result.setUsed_time(resultInDTO.getUsed_time());
-        result.setIs_completed(resultInDTO.getIs_completed());
-        result.setAns_list(resultInDTO.getAns_list());
-        result.setTest_id(resultInDTO.getTest_id());
-        result.setUser_id(resultInDTO.getUser_id());
+        result.setUsedtime(resultInDTO.getUsedtime());
+        result.setIscompleted(resultInDTO.getIscompleted());
+        result.setAnslist(resultInDTO.getAnslist());
+        result.setTestid(resultInDTO.getTestid());
+        result.setUserid(resultInDTO.getUserid());
         return result;
     }
 
@@ -28,12 +28,12 @@ public class ResultMap {
     public ResultOutDTO entityToDto(Result result){
         ResultOutDTO resultOutDTO = new ResultOutDTO();
         resultOutDTO.setStart(result.getStart());
-        resultOutDTO.setUsed_time(result.getUsed_time());
-        resultOutDTO.setIs_completed(result.getIs_completed());
-        resultOutDTO.setAns_list(result.getAns_list());
+        resultOutDTO.setUsedtime(result.getUsedtime());
+        resultOutDTO.setIscompleted(result.getIscompleted());
+        resultOutDTO.setAnslist(result.getAnslist());
         resultOutDTO.setMark(result.getMark());
-        resultOutDTO.setTest_id(result.getTest_id());
-        resultOutDTO.setUser_id(result.getUser_id());
+        resultOutDTO.setTestid(result.getTestid());
+        resultOutDTO.setUserid(result.getUserid());
         return resultOutDTO;
     }
 

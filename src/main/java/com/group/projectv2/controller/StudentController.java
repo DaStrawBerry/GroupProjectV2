@@ -25,7 +25,7 @@ public class StudentController {
                                         @RequestParam(required = false, defaultValue = "true") Boolean is_limit){
         Test test = new Test();
         test.setName(name);
-        test.setIs_limit(is_limit);
+        test.setIslimit(is_limit);
         return testService.retrieveTestByNameOrType(test);
     }
     @PostMapping("/tests/doTest")

@@ -19,8 +19,8 @@ public class QuestionServiceImp implements QuestionService {
     QuestionRepository repository;
     @Override
     public ResponseEntity<?> createQuestion(Test test, Question question) {
-        question.setTest_id(test.getId());
-        question.setN_th(repository.findAllByTest_id(test.getId()).size() + 1);
+        question.setTestid(test.getId());
+        question.setN_th(repository.findAllByTestid(test.getId()).size() + 1);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ResponseObject(
                         "SUCCESS",
@@ -31,7 +31,7 @@ public class QuestionServiceImp implements QuestionService {
 
     @Override
     public ResponseEntity<?> createQuestion(Test test, List<Question> questions) {
-        int n = repository.findAllByTest_id(test.getId()).size();
+        int n = repository.findAllByTestid(test.getId()).size();
         for(Question q : questions){
             n++;
             q.setN_th(n);
@@ -65,7 +65,7 @@ public class QuestionServiceImp implements QuestionService {
 
     @Override
     public ResponseEntity<?> retrieveQuestionByTestId(Test test) {
-        List<Question> questions = repository.findAllByTest_id(test.getId());
+        List<Question> questions = repository.findAllByTestid(test.getId());
         if(questions.isEmpty()){
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject(
@@ -111,7 +111,7 @@ public class QuestionServiceImp implements QuestionService {
     @Override
     public ResponseEntity<?> deleteQuestion(Question question) {
         try {
-            List<Question> questions = repository.findAllByTest_id(question.getTest_id());
+            List<Question> questions = repository.findAllByTestid(question.getTestid());
             for(int i = question.getN_th(); i < questions.size(); i++){
                 questions.get(i).setN_th(questions.get(i).getN_th() - 1);
             }
@@ -134,7 +134,7 @@ public class QuestionServiceImp implements QuestionService {
     @Override
     public ResponseEntity<?> deleteQuestionByTestId(Test test) {
         try {
-            repository.deleteAllByTest_id(test.getId());
+            repository.deleteAllByTestid(test.getId());
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject(

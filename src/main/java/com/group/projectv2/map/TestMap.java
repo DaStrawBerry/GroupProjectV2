@@ -11,7 +11,7 @@ public class TestMap {
     public Test dtoToEntity(TestDTO testDTO){
         Test test = new Test();
         test.setName(testDTO.getName());
-        test.setIs_limit(testDTO.getIs_limit());
+        test.setIslimit(testDTO.getIslimit());
         test.setDuration(testDTO.getDuration());
         test.setStart(testDTO.getStart());
         test.setEnd(testDTO.getEnd());
@@ -25,7 +25,7 @@ public class TestMap {
     public TestDTO entityToDto(Test test){
         TestDTO testDTO = new TestDTO();
         testDTO.setName(test.getName());
-        testDTO.setIs_limit(test.getIs_limit());
+        testDTO.setIslimit(test.getIslimit());
         testDTO.setDuration(test.getDuration());
         testDTO.setStart(test.getStart());
         testDTO.setEnd(test.getEnd());

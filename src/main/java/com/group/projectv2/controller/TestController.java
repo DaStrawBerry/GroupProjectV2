@@ -24,7 +24,7 @@ public class TestController {
                                         @RequestParam(required = false, defaultValue = "true") Boolean is_limit) {
         Test test = new Test();
         test.setName(name);
-        test.setIs_limit(is_limit);
+        test.setIslimit(is_limit);
         return service.retrieveTestByNameOrType(test);
     }
 
