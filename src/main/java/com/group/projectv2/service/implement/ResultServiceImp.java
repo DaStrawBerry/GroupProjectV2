@@ -1,5 +1,6 @@
 package com.group.projectv2.service.implement;
 
+import com.group.projectv2.dto.ResultDTO;
 import com.group.projectv2.dto.ResultInDTO;
 import com.group.projectv2.entity.*;
 import com.group.projectv2.map.ResultMap;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,18 +23,56 @@ public class ResultServiceImp implements ResultService {
     QuestionRepository questionRepository;
     @Autowired
     ResultMap rmap;
+    @Autowired
+    TestServiceImp testService;
+
     @Override
-    public ResponseEntity<?> doTest(User user, Test test) {
+    public ResponseEntity<?> getAllResult() {
+        List<Result> results = repository.findAll();
+        if(results.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseObject(
+                            "EMPTY",
+                            "No result found",
+                            results
+                    ));
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject(
+                        "OK",
+                        "Found " + results.size() + " results",
+                        results
+                ));
+    }
+
+    @Override
+    public ResponseEntity<?> doTest(ResultDTO resultDTO) {
         Result result = new Result();
-        result.setUser_id(user.getId());
-        result.setTest_id(test.getId());
+        result.setUser_id(resultDTO.getUser_id());
+        result.setTest_id(resultDTO.getTest_id());
         result.setMark(0.0);
         result.setIs_completed(false);
+
+        List<Object> data = new ArrayList<>();
+        Test test = new Test();
+        test.setId(resultDTO.getTest_id());
+        data.add(
+                ((ResponseObject)
+                        testService.retrieveTestById(resultDTO.getTest_id())
+                                .getBody())
+                        .getData()
+        );
+        data.add(
+                ((ResponseObject)
+                        testService.retrieveAllQuestion(test)
+                                .getBody())
+                        .getData()
+        );
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(new ResponseObject(
                         "START",
                         "Do the test now",
-                        rmap.entityToDto(repository.save(result))
+                        data
                 ));
     }
 
@@ -85,15 +125,21 @@ public class ResultServiceImp implements ResultService {
     }
 
     @Override
-    public ResponseEntity<?> getResult(ResultInDTO resultInDTO) {
-        Result result = rmap.dtoToEntity(resultInDTO);
-        List<Result> results = repository.findAllByUser_id(result.getUser_id());
+    public ResponseEntity<?> getResult(ResultDTO resultDTO) {
+        List<Result> results = repository.findAllByUser_id(resultDTO.getUser_id());
+        if(resultDTO.getTest_id().compareTo("")==0){
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject(
+                            "FOUND",
+                            "Found " + results.size() + " result",
+                            results
+                    ));
+        }
+        Result result = null;
         for (Result r : results){
-            if(r.getTest_id().compareTo(result.getTest_id())==0){
+            if(r.getTest_id().compareTo(resultDTO.getTest_id())==0){
                 result = r;
                 break;
-            }else{
-                result = null;
             }
         }
         if(result != null){

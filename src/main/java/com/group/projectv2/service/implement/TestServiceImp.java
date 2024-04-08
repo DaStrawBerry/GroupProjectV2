@@ -1,8 +1,10 @@
 package com.group.projectv2.service.implement;
 
+import com.group.projectv2.dto.TestDTO;
 import com.group.projectv2.entity.Question;
 import com.group.projectv2.entity.ResponseObject;
 import com.group.projectv2.entity.Test;
+import com.group.projectv2.map.TestMap;
 import com.group.projectv2.repository.TestRepository;
 import com.group.projectv2.service.QuestionService;
 import com.group.projectv2.service.TestService;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TestServiceImp implements TestService {
@@ -19,8 +22,11 @@ public class TestServiceImp implements TestService {
     TestRepository repository;
     @Autowired
     QuestionService qService;
+    @Autowired
+    TestMap testMap;
     @Override
-    public ResponseEntity<?> createTest(Test test) {
+    public ResponseEntity<?> createTest(TestDTO testDTO) {
+        Test test = testMap.dtoToEntity(testDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ResponseObject(
                         "SUCCESS",
@@ -30,7 +36,7 @@ public class TestServiceImp implements TestService {
     }
 
     @Override
-    public ResponseEntity<?> retrieveAllTest(Test test) {
+    public ResponseEntity<?> retrieveAllTest() {
         List<Test> tests = repository.findAll();
         if(!tests.isEmpty()){
             return ResponseEntity.status(HttpStatus.OK)
@@ -45,6 +51,25 @@ public class TestServiceImp implements TestService {
                         "EMPTY",
                         "No tests found",
                         tests
+                ));
+    }
+
+    @Override
+    public ResponseEntity<?> retrieveTestById(String id) {
+        Optional<Test> test = repository.findById(id);
+        if(test.isPresent()){
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject(
+                            "FOUND",
+                            "Found test: " + test.get().getName(),
+                            test
+                    ));
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ResponseObject(
+                        "NOT_FOUND",
+                        "Not found test: " + id,
+                        ""
                 ));
     }
 

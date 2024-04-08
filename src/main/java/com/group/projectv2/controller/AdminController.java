@@ -32,7 +32,7 @@ public class AdminController {
 
     @DeleteMapping("/accounts/delete")
     public ResponseEntity<?> deleteAccount(@RequestBody User user){
-        return service.updateUser(user);
+        return service.deleteUser(user);
     }
 
 }

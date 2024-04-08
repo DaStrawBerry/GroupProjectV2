@@ -1,5 +1,6 @@
 package com.group.projectv2.service;
 
+import com.group.projectv2.dto.TestDTO;
 import com.group.projectv2.entity.Question;
 import com.group.projectv2.entity.Test;
 import org.springframework.http.ResponseEntity;
@@ -7,8 +8,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface TestService {
-    public ResponseEntity<?> createTest(Test test);
-    public ResponseEntity<?> retrieveAllTest(Test test);
+    public ResponseEntity<?> createTest(TestDTO testDTO);
+    public ResponseEntity<?> retrieveAllTest();
+    public ResponseEntity<?> retrieveTestById(String id);
     public ResponseEntity<?> retrieveTestByNameOrType(Test test);
     public ResponseEntity<?> updateTest(Test test);
     public ResponseEntity<?> addQuestion(Test test, Question question);
