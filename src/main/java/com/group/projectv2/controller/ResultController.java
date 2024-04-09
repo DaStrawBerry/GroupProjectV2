@@ -1,11 +1,14 @@
 package com.group.projectv2.controller;
 
 import com.group.projectv2.dto.ResultDTO;
+import com.group.projectv2.helper.ExcelDownloadHelper;
 import com.group.projectv2.service.implement.ResultServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 
 @RestController
@@ -42,5 +45,10 @@ public class ResultController {
     @GetMapping("statistic")
     public ResponseEntity<?> getStatistic(){
         return service.getStatistic();
+    }
+
+    @GetMapping("statistic/excelDownload")
+    public ResponseEntity<?> excelDownload(){
+        return service.excelDownload();
     }
 }

@@ -6,12 +6,16 @@ import com.group.projectv2.entity.Question;
 import com.group.projectv2.entity.ResponseObject;
 import com.group.projectv2.entity.Result;
 import com.group.projectv2.entity.Test;
+import com.group.projectv2.helper.ExcelDownloadHelper;
 import com.group.projectv2.map.ResultMap;
 import com.group.projectv2.repository.QuestionRepository;
 import com.group.projectv2.repository.ResultRepository;
 import com.group.projectv2.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -230,6 +234,16 @@ public class ResultServiceImp implements ResultService {
                         "Completion Ratio: " + completionRatio,
                         "Average Mark: " + averageMark
                 ));
+    }
+
+    public ResponseEntity<?> excelDownload(){
+        String filename = "results.xlsx";
+        List<Result> results = resultRepository.findAll();
+        InputStreamResource file = new InputStreamResource(ExcelDownloadHelper.resultsToExcel(results));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                .body(file);
     }
 
     @Override

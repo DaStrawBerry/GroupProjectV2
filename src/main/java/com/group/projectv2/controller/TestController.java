@@ -4,7 +4,7 @@ import com.group.projectv2.dto.Pack1;
 import com.group.projectv2.dto.TestDTO;
 import com.group.projectv2.entity.Question;
 import com.group.projectv2.entity.Test;
-import com.group.projectv2.helper.ExcelHelper;
+import com.group.projectv2.helper.ExcelUploadHelper;
 import com.group.projectv2.service.implement.TestServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -53,7 +53,7 @@ public class TestController {
     }
     @PostMapping(path = "/questions/excelUpload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addQuestionsByExcel(@RequestBody Test test, @RequestPart MultipartFile file) throws IOException {
-        List<Question> questions = ExcelHelper.excelToQuestions(file.getInputStream());
+        List<Question> questions = ExcelUploadHelper.excelToQuestions(file.getInputStream());
         return service.addQuestions(test, questions);
     }
     @PutMapping("/questions")
