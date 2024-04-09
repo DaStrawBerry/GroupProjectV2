@@ -43,6 +43,10 @@ public class TestController {
     public ResponseEntity<?> editTest(@RequestBody Test test){
         return service.updateTest(test);
     }
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteTest(@RequestBody Test test){
+        return service.deleteTest(test);
+    }
     @GetMapping("/questions")
     public ResponseEntity<?> getAllQuestion(@RequestBody Test test){
         return service.retrieveAllQuestion(test);

@@ -32,6 +32,11 @@ public class ResultController {
         return service.getResult(resultDTO);
     }
 
+    @GetMapping("statistic")
+    public ResponseEntity<?> getStatistic(){
+        return service.getStatistic();
+    }
+
     @GetMapping("statistic/filter/{date}")
     public ResponseEntity<?> getResultsByDate(@PathVariable LocalDate date){
         return service.getResultsByDate(date);
@@ -40,11 +45,6 @@ public class ResultController {
     @GetMapping("statistic/filter/{id}")
     public ResponseEntity<?> getResultsByTestId(@PathVariable String testid){
         return service.getResultsByTestId(testid);
-    }
-
-    @GetMapping("statistic")
-    public ResponseEntity<?> getStatistic(){
-        return service.getStatistic();
     }
 
     @GetMapping("statistic/excelDownload")
