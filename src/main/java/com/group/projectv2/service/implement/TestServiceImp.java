@@ -127,7 +127,7 @@ public class TestServiceImp implements TestService {
     }
 
     @Override
-    public ResponseEntity<?> addQuestion(Test test, List<Question> questions) {
+    public ResponseEntity<?> addQuestions(Test test, List<Question> questions) {
         return qService.createQuestion(test, questions);
     }
 

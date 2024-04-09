@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("/admin/results")
 public class ResultController {
@@ -21,8 +23,24 @@ public class ResultController {
         ResultDTO resultDTO = new ResultDTO("",student_id);
         return service.getResult(resultDTO);
     }
+
     @PostMapping("/student_results")
     public ResponseEntity<?> getResult(@RequestBody ResultDTO resultDTO){
         return service.getResult(resultDTO);
+    }
+
+    @GetMapping("statistic/filter/{date}")
+    public ResponseEntity<?> getResultsByDate(@PathVariable LocalDate date){
+        return service.getResultsByDate(date);
+    }
+
+    @GetMapping("statistic/filter/{id}")
+    public ResponseEntity<?> getResultsByTestId(@PathVariable String testid){
+        return service.getResultsByTestId(testid);
+    }
+
+    @GetMapping("statistic")
+    public ResponseEntity<?> getStatistic(){
+        return service.getStatistic();
     }
 }

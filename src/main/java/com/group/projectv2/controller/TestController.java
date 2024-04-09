@@ -4,10 +4,16 @@ import com.group.projectv2.dto.Pack1;
 import com.group.projectv2.dto.TestDTO;
 import com.group.projectv2.entity.Question;
 import com.group.projectv2.entity.Test;
+import com.group.projectv2.helper.ExcelHelper;
 import com.group.projectv2.service.implement.TestServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/admin/test")
@@ -44,6 +50,11 @@ public class TestController {
     @PostMapping("/questions")
     public ResponseEntity<?> addQuestion(@RequestBody Pack1 pack){
         return service.addQuestion(pack.getTest(), pack.getQuestion());
+    }
+    @PostMapping(path = "/questions/excelUpload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> addQuestionsByExcel(@RequestBody Test test, @RequestPart MultipartFile file) throws IOException {
+        List<Question> questions = ExcelHelper.excelToQuestions(file.getInputStream());
+        return service.addQuestions(test, questions);
     }
     @PutMapping("/questions")
     public ResponseEntity<?> editQuestion(@RequestBody Question question){

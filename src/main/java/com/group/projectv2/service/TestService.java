@@ -14,7 +14,7 @@ public interface TestService {
     public ResponseEntity<?> retrieveTestByNameOrType(Test test);
     public ResponseEntity<?> updateTest(Test test);
     public ResponseEntity<?> addQuestion(Test test, Question question);
-    public ResponseEntity<?> addQuestion(Test test, List<Question> questions);
+    public ResponseEntity<?> addQuestions(Test test, List<Question> questions);
     public ResponseEntity<?> retrieveAllQuestion(Test test);
     public ResponseEntity<?> editQuestion(Question question);
     public ResponseEntity<?> deleteQuestion(Question question);
