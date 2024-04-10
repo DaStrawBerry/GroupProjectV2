@@ -36,7 +36,7 @@ public class StudentController {
     public ResponseEntity<?> submitTest(@RequestBody ResultInDTO resultInDTO){
         return resultService.finish(resultInDTO);
     }
-    @GetMapping("/tests/result")
+    @PostMapping("/tests/result/more")
     public ResponseEntity<?> findResult(@RequestBody ResultDTO resultDTO){
         return resultService.getResult(resultDTO);
     }

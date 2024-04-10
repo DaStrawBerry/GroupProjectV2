@@ -2,6 +2,7 @@ package com.group.projectv2.service.implement;
 
 import com.group.projectv2.dto.ResultDTO;
 import com.group.projectv2.dto.ResultInDTO;
+import com.group.projectv2.dto.TestIdDTO;
 import com.group.projectv2.entity.Question;
 import com.group.projectv2.entity.ResponseObject;
 import com.group.projectv2.entity.Result;
@@ -72,10 +73,11 @@ public class ResultServiceImp implements ResultService {
         );
         data.add(
                 ((ResponseObject)
-                        testService.retrieveAllQuestion(test)
+                        testService.retrieveAllQuestion(test.getId())
                                 .getBody())
                         .getData()
         );
+        resultRepository.save(result);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(new ResponseObject(
                         "START",

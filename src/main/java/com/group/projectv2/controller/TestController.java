@@ -2,9 +2,11 @@ package com.group.projectv2.controller;
 
 import com.group.projectv2.dto.Pack1;
 import com.group.projectv2.dto.TestDTO;
+import com.group.projectv2.dto.TestIdDTO;
 import com.group.projectv2.entity.Question;
 import com.group.projectv2.entity.Test;
 import com.group.projectv2.helper.ExcelUploadHelper;
+import com.group.projectv2.service.implement.QuestionServiceImp;
 import com.group.projectv2.service.implement.TestServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,6 +22,8 @@ import java.util.List;
 public class TestController {
     @Autowired
     TestServiceImp service;
+    @Autowired
+    QuestionServiceImp qService;
     @GetMapping("/")
     public ResponseEntity<?> allTest(){
         return service.retrieveAllTest();
@@ -47,9 +51,9 @@ public class TestController {
     public ResponseEntity<?> deleteTest(@RequestBody Test test){
         return service.deleteTest(test);
     }
-    @GetMapping("/questions")
-    public ResponseEntity<?> getAllQuestion(@RequestBody Test test){
-        return service.retrieveAllQuestion(test);
+    @PostMapping("/questions/test/{id}")
+    public ResponseEntity<?> getAllQuestion(@PathVariable String id){
+        return qService.retrieveQuestionByTestId(id);
     }
     @PostMapping("/questions")
     public ResponseEntity<?> addQuestion(@RequestBody Pack1 pack){
