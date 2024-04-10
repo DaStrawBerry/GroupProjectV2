@@ -1,10 +1,15 @@
 package com.group.projectv2.controller;
 
 import com.group.projectv2.dto.ResultDTO;
+import com.group.projectv2.helper.ExcelDownloadHelper;
 import com.group.projectv2.service.implement.ResultServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.ByteArrayInputStream;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/admin/results")
@@ -21,8 +26,29 @@ public class ResultController {
         ResultDTO resultDTO = new ResultDTO("",student_id);
         return service.getResult(resultDTO);
     }
+
     @PostMapping("/student_results")
     public ResponseEntity<?> getResult(@RequestBody ResultDTO resultDTO){
         return service.getResult(resultDTO);
+    }
+
+    @GetMapping("statistic")
+    public ResponseEntity<?> getStatistic(){
+        return service.getStatistic();
+    }
+
+    @GetMapping("statistic/filter/{date}")
+    public ResponseEntity<?> getResultsByDate(@PathVariable LocalDate date){
+        return service.getResultsByDate(date);
+    }
+
+    @GetMapping("statistic/filter/{id}")
+    public ResponseEntity<?> getResultsByTestId(@PathVariable String testid){
+        return service.getResultsByTestId(testid);
+    }
+
+    @GetMapping("statistic/excelDownload")
+    public ResponseEntity<?> excelDownload(){
+        return service.excelDownload();
     }
 }

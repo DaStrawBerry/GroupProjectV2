@@ -2,16 +2,24 @@ package com.group.projectv2.service.implement;
 
 import com.group.projectv2.dto.ResultDTO;
 import com.group.projectv2.dto.ResultInDTO;
-import com.group.projectv2.entity.*;
+import com.group.projectv2.entity.Question;
+import com.group.projectv2.entity.ResponseObject;
+import com.group.projectv2.entity.Result;
+import com.group.projectv2.entity.Test;
+import com.group.projectv2.helper.ExcelDownloadHelper;
 import com.group.projectv2.map.ResultMap;
 import com.group.projectv2.repository.QuestionRepository;
 import com.group.projectv2.repository.ResultRepository;
 import com.group.projectv2.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,6 +102,7 @@ public class ResultServiceImp implements ResultService {
             }
         }
 
+        result.setIscompleted(true);
         result.setMark((double) (correct / questions.size())*10);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED)
@@ -156,6 +165,85 @@ public class ResultServiceImp implements ResultService {
                         "Can not found a result",
                         null
                 ));
+    }
+
+    @Override
+    public ResponseEntity<?> getResultsByTestId(String testid) {
+        List<Result> results = resultRepository.findAllByTestid(testid);
+        if(!results.isEmpty()){
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject(
+                        "FOUND",
+                        "Found " + results.size() + " result",
+                        results
+                ));
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(new ResponseObject(
+                    "EMPTY",
+                    "Can not found a result",
+                    null
+            ));
+    }
+
+    @Override
+    public ResponseEntity<?> getResultsByDate(LocalDate date){
+        List<Result> results = resultRepository.findAll();
+        List<Result> resultsByDate = new ArrayList<>();
+        for (Result r : results){
+            if(r.getStart().toLocalDate().compareTo(date)==0){
+                resultsByDate.add(r);
+            }
+        }
+        if(!results.isEmpty()){
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject(
+                            "FOUND",
+                            "Found " + results.size() + " result",
+                            results
+                    ));
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ResponseObject(
+                        "EMPTY",
+                        "Can not found a result",
+                        null
+                ));
+    }
+
+    @Override
+    public ResponseEntity<?> getStatistic(){
+        List<Result> results = resultRepository.findAll();
+        double completed = 0;
+        double avg = 0;
+
+        for (Result r : results){
+            if(r.getIscompleted()){
+                completed++;
+            }
+            avg += r.getMark();
+        }
+
+        // Handling division by zero
+        double completionRatio = results.size() > 0 ? (double) completed / results.size() : 0.0;
+        double averageMark = results.size() > 0 ? avg / results.size() : 0.0;
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject(
+                        "Number of results" + results.size(),
+                        "Completion Ratio: " + completionRatio,
+                        "Average Mark: " + averageMark
+                ));
+    }
+
+    public ResponseEntity<?> excelDownload(){
+        String filename = "results.xlsx";
+        List<Result> results = resultRepository.findAll();
+        InputStreamResource file = new InputStreamResource(ExcelDownloadHelper.resultsToExcel(results));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                .body(file);
     }
 
     @Override
