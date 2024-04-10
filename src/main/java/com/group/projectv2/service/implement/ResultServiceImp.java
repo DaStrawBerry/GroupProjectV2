@@ -93,19 +93,21 @@ public class ResultServiceImp implements ResultService {
         for (Result r : results){
             if(r.getTestid().compareTo(result.getTestid())==0){
                 result = r;
+                result.setAnslist(resultInDTO.getAnslist());
                 break;
             }
         }
         int correct = 0;
         List<Question> questions = questionRepository.findAllByTestid(result.getTestid());
-        for (int i = 1; i <= questions.size(); i++) {
+        for (int i = 0; i < questions.size(); i++) {
             if (questions.get(i).getAnswer().compareTo(result.getAnslist()[i])==0){
                 correct++;
             }
         }
 
         result.setIscompleted(true);
-        result.setMark((double) (correct / questions.size())*10);
+        result.setMark((double)correct*10 / (double) questions.size());
+        System.out.print(result.getMark());
 
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(new ResponseObject(
