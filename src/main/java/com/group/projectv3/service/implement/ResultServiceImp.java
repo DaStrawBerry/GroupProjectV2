@@ -169,7 +169,7 @@ public class ResultServiceImp implements ResultService {
         ReqRes resp = new ReqRes();
         try {
             List<Result> results = resultRepository.findAllByTestcode(resultDTO.getTestcode());
-            Result result = null;
+            Result result = resultDTOMap.ResultDTOToResult(resultDTO);
             for (Result r : results){
                 if(r.getUsername().compareTo(resultDTO.getUsername())==0){
                     result = r;
@@ -179,7 +179,7 @@ public class ResultServiceImp implements ResultService {
 
             result.setIscompleted(true);
             result.setSub(LocalDateTime.now());
-            result.setUsedtime(Duration.between(result.getStart(), resultDTO.getSub()));
+            result.setUsedtime(Duration.between(result.getStart(), LocalDateTime.now()));
             result.setAnslist(resultDTO.getAnslist());
 
             int correct = 0;
