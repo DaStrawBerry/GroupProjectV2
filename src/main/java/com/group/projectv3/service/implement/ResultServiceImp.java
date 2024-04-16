@@ -143,7 +143,7 @@ public class ResultServiceImp implements ResultService {
             result.setMark(0.0);
             result.setIscompleted(false);
             result.setStart(LocalDateTime.now());
-            result.setSub(LocalDateTime.of(9999,12,31,24,59,59));
+            result.setSub(LocalDateTime.of(9999,12,31,23,59,59));
             result.setUsedtime(Duration.ofMinutes(0));
 
             int n = questionRepository.findAllByTestcode(resultDTO.getTestcode()).size();
