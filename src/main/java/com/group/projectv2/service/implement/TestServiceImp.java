@@ -1,6 +1,7 @@
 package com.group.projectv2.service.implement;
 
 import com.group.projectv2.dto.TestDTO;
+import com.group.projectv2.dto.TestIdDTO;
 import com.group.projectv2.entity.Question;
 import com.group.projectv2.entity.ResponseObject;
 import com.group.projectv2.entity.Test;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,8 +77,15 @@ public class TestServiceImp implements TestService {
 
     @Override
     public ResponseEntity<?> retrieveTestByNameOrType(Test test) {
-        List<Test> tests = repository.findAllByNameLike(test.getName());
-        if(!tests.isEmpty()){
+        List<Test> testss = repository.findAllByNameLike(test.getName());
+        List<Test> tests = new ArrayList<>();
+        if(!testss.isEmpty()){
+            for(Test t : testss){
+                if(t.getIslimit() && test.getIslimit()){
+                    tests.add(t);
+                }
+            }
+        }else{
             tests = repository.findAllByIslimit(test.getIslimit());
         }
         if(!tests.isEmpty()){
@@ -127,13 +136,13 @@ public class TestServiceImp implements TestService {
     }
 
     @Override
-    public ResponseEntity<?> addQuestion(Test test, List<Question> questions) {
+    public ResponseEntity<?> addQuestions(Test test, List<Question> questions) {
         return qService.createQuestion(test, questions);
     }
 
     @Override
-    public ResponseEntity<?> retrieveAllQuestion(Test test) {
-        return qService.retrieveQuestionByTestId(test);
+    public ResponseEntity<?> retrieveAllQuestion(String id) {
+        return qService.retrieveQuestionByTestId(id);
     }
 
     @Override

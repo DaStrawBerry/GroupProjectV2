@@ -64,9 +64,9 @@ public class QuestionServiceImp implements QuestionService {
     }
 
     @Override
-    public ResponseEntity<?> retrieveQuestionByTestId(Test test) {
-        List<Question> questions = repository.findAllByTestid(test.getId());
-        if(questions.isEmpty()){
+    public ResponseEntity<?> retrieveQuestionByTestId(String id) {
+        List<Question> questions = repository.findAllByTestid(id);
+        if(!questions.isEmpty()){
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject(
                             "FOUND",

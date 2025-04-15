@@ -32,11 +32,11 @@ public class StudentController {
     public ResponseEntity<?> doTest(@RequestBody ResultDTO resultDTO){
         return resultService.doTest(resultDTO);
     }
-    @PostMapping("/tests/result")
+    @PostMapping("/tests/submit")
     public ResponseEntity<?> submitTest(@RequestBody ResultInDTO resultInDTO){
         return resultService.finish(resultInDTO);
     }
-    @GetMapping("/tests/result")
+    @PostMapping("/tests/result/more")
     public ResponseEntity<?> findResult(@RequestBody ResultDTO resultDTO){
         return resultService.getResult(resultDTO);
     }
